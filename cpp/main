@@ -1,0 +1,79 @@
+#include <iostream>
+#include <../eigen/Eigen/Dense>
+#include <pybind11/pybind11.h>
+#include <pybind11/eigen.h>
+#include <tuple>
+
+using namespace std;
+
+namespace py = pybind11;
+
+tuple<double, Eigen::VectorXd, pair<int, double>> power_iteration_convergence(Eigen::MatrixXd &A, int niter = 10000, double eps = exp(-64.0)){
+  Eigen::VectorXd x = Eigen::VectorXd::Random(A.rows());
+  Eigen::VectorXd convergenceVector;
+  x.normalize();
+
+  double a = 1; //autovalor
+  double err = eps + 1;
+  int i = 0;
+  Eigen::VectorXd previo = x;
+  while(i < niter && err > eps){
+    x = A * x;
+    x.normalize();
+    a = (x.transpose() * A * x)(0)/(x.transpose() * x)(0);
+
+    err = (x - previo).cwiseAbs().maxCoeff();//norma infinito
+
+    convergenceVector = A * x - a * x;
+    if(convergenceVector.norm() <= eps){
+      break;
+    }
+
+    previo = x;
+    i++;
+  }
+
+  return std::make_tuple(a, x, make_pair(i, err));
+
+}
+
+tuple<Eigen::VectorXd, Eigen::MatrixXd, pair<Eigen::VectorXd, Eigen::VectorXd>> eigen_convergence(const Eigen::MatrixXd A, int niter = 10000, double eps = exp(-64.0)){
+  Eigen::MatrixXd _A = A;// lo mismo que A.copy()
+  int n = _A.rows();
+  Eigen::VectorXd convergencias(n);
+  Eigen::VectorXd errores(n);
+  Eigen::VectorXd eigenvalues(n);
+  Eigen::MatrixXd eigenvectors(n, n);
+  for (int i = 0; i < n; i++){
+    tuple<double, Eigen::VectorXd, pair<int, double>> res = power_iteration_convergence(_A, niter, eps);
+    double a = std::get<0>(res);
+    Eigen::VectorXd v = std::get<1>(res);
+    int iteraciones = std::get<0>(std::get<2>(res));
+    double error = std::get<1>(std::get<2>(res));
+
+    eigenvalues[i] = a;
+    eigenvectors.col(i) = v;
+    convergencias[i] = iteraciones;
+    errores[i] = error;
+
+    _A = (_A - a * (v * v.transpose()));
+  }
+
+  return std::make_tuple(eigenvalues, eigenvectors, make_pair(convergencias, errores));
+}
+
+
+Eigen::MatrixXd matrix_vector_multiplication(Eigen::MatrixXd A, Eigen::VectorXd v){
+  return A * v;
+}
+
+PYBIND11_MODULE(TP2Metodos, m) {
+    m.doc() = "pybind11 matrix module example";
+    m.def("power_iteration_convergence", &power_iteration_convergence, "Autovalor dominante y iteraciones en conseguirlo.");
+    m.def("eigen_convergence", &eigen_convergence, "Autovalores, autovectores y velocidad de convergencia.");
+    m.def("matrix_vector_multiplication", &matrix_vector_multiplication);
+}
+
+int main() {
+    return 0;
+}
