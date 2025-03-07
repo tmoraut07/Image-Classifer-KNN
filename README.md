@@ -1,1 +1,1 @@
-Image classificator using KNN.
+Image classifier using KNN.
