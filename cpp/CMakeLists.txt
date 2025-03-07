@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.25)
+project(TP2Metodos)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS "-Wall -std=c++17 -I ../lib/eigen -O3 -march=native")
+#find_package(Eigen3)
+find_package(pybind11)
+add_subdirectory(lib/pybind11)
+#include_directories(lib/eigen-3.4.0)
+pybind11_add_module(TP2Metodos main.cpp)
+#add_executable(TP2Metodos main.cpp)

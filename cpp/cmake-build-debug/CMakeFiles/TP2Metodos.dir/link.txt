@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -Wall -std=c++17 -I ../lib/eigen -O3 -march=native -flto -shared  -o TP2Metodos.cpython-310-x86_64-linux-gnu.so CMakeFiles/TP2Metodos.dir/main.cpp.o

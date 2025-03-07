@@ -1,0 +1,5 @@
+/home/tobias/Escritorio/Metdos numericos/MetNum/TP2/cpp/cmake-build-debug/CMakeFiles/TP2Metodos.dir
+/home/tobias/Escritorio/Metdos numericos/MetNum/TP2/cpp/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/tobias/Escritorio/Metdos numericos/MetNum/TP2/cpp/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/tobias/Escritorio/Metdos numericos/MetNum/TP2/cpp/cmake-build-debug/lib/pybind11/CMakeFiles/edit_cache.dir
+/home/tobias/Escritorio/Metdos numericos/MetNum/TP2/cpp/cmake-build-debug/lib/pybind11/CMakeFiles/rebuild_cache.dir
